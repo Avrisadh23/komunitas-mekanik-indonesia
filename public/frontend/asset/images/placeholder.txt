@@ -1,0 +1,29 @@
+FOLDER IMAGES
+
+Gambar yang diperlukan untuk website:
+
+1. chili-logo.png - Logo cabai untuk Chilidentifier (30x30px, format PNG)
+   - Simpan dengan nama: chili-logo.png
+   - Ukuran yang direkomendasikan: 30x30 pixel
+   - Format: PNG dengan background transparan
+   - Deskripsi: Ikon cabai putih dengan latar belakang transparan
+
+2. tomy-huang.jpg - Gambar speaker Tomy Huang (200x200px, format JPG)
+   - Simpan dengan nama: tomy-huang.jpg
+   - Ukuran yang direkomendasikan: 200x200 pixel
+   - Format: JPG atau PNG
+
+3. Logo perusahaan (opsional)
+   - Simpan dengan nama: logo.png
+   - Ukuran yang direkomendasikan: 150x50 pixel
+   - Format: PNG dengan background transparan
+
+3. Gambar produk (opsional)
+   - Simpan dengan nama: product-1.jpg, product-2.jpg, dst
+   - Ukuran yang direkomendasikan: 300x200 pixel
+   - Format: JPG
+
+Catatan:
+- Pastikan gambar memiliki ukuran yang optimal untuk web (tidak terlalu besar)
+- Gunakan format JPG untuk foto dan PNG untuk gambar dengan transparansi
+- Kompres gambar untuk mempercepat loading website
