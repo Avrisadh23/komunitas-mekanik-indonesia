@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Komunitas Mekanik Indonesia</title>
+    <link rel="icon" type="image/png" href="{{ asset('frontend/asset/images/logo-kmi.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -312,7 +313,7 @@
             </form>
 
             <div class="login-footer">
-                Butuh bantuan? <a href="https://wa.me/628214693145" target="_blank">Hubungi Admin</a>
+                Butuh bantuan? <a href="https://wa.me/6282114693145" target="_blank">Hubungi Admin</a>
             </div>
         </div>
     </div>

@@ -91,7 +91,7 @@
         <div class="registration-card">
             <h3>Bergabunglah dengan KMI</h3>
             <p>Menjadi bagian dari komunitas mekanik terbesar di Indonesia. Dapatkan akses ke jaringan bisnis, training, dan berbagai keuntungan eksklusif lainnya.</p>
-            <a href="https://wa.me/628214693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
+            <a href="https://wa.me/6282114693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
         </div>
     </div>
 </section>

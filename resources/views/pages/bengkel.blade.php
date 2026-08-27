@@ -36,7 +36,7 @@
         <div class="cta-card">
             <h3>Ingin Bergabung Sebagai Bengkel Rekanan?</h3>
             <p>Daftarkan bengkel Anda dan nikmati berbagai keuntungan sebagai mitra KMI</p>
-            <a href="https://wa.me/628214693145" class="btn btn-primary" target="_blank">Hubungi Kami Sekarang</a>
+            <a href="https://wa.me/6282114693145" class="btn btn-primary" target="_blank">Hubungi Kami Sekarang</a>
         </div>
     </div>
 </section>

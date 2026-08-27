@@ -7,12 +7,9 @@
     <div class="container">
         <div class="hero-content">
             <h1>KOMUNITAS MEKANIK INDONESIA</h1>
-            <p style="font-size: 1.5rem; line-height: 1.4;">SILATURAHMI TANPA BATAS</p>
+            <p style="font-size: 1.5rem; line-height: 1.4; font-weight: 800; letter-spacing: 1px;">SILATURAHMI TANPA BATAS</p>
             <p style="font-size: 1rem; font-weight: 400; margin-bottom: 2rem; color: rgba(255,255,255,0.95);">Gabung Bersama Kami Untuk Menjalin Silaturahmi</p>
             <a href="{{ route('home') }}#tentang" class="btn btn-primary">Lihat Selengkapnya</a>
-        </div>
-        <div class="hero-image">
-            <img src="{{ asset('frontend/asset/images/Munas.jpeg') }}" alt="KMI Members" style="width: 350px; height: 350px; object-fit: cover; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
         </div>
     </div>
 </section>
@@ -97,8 +94,8 @@
         <div class="registration-card">
             <h3>Bergabunglah dengan KMI</h3>
             <p>Menjadi bagian dari komunitas mekanik terbesar di Indonesia. Dapatkan akses ke jaringan bisnis, training, dan berbagai keuntungan eksklusif lainnya.</p>
-            <div class="phone-number">☎️ 087764116086 / 08214693145</div>
-            <a href="https://wa.me/628214693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
+            <div class="phone-number">☎️ 087764116086 / 082114693145</div>
+            <a href="https://wa.me/6282114693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
         </div>
     </div>
 </section>

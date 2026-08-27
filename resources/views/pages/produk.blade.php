@@ -29,8 +29,8 @@
         <div class="registration-card">
             <h3>📱 Promosikan Produkmu</h3>
             <p>Ingin produk Anda ditampilkan di sini? Hubungi kami melalui WhatsApp untuk info lebih lanjut dan paket promosi menarik.</p>
-            <div class="phone-number">☎️ 087764116086 / 08214693145</div>
-            <a href="https://wa.me/628214693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
+            <div class="phone-number">☎️ 087764116086 / 082114693145</div>
+            <a href="https://wa.me/6282114693145" class="btn-whatsapp" target="_blank">📲 Hubungi via WhatsApp</a>
         </div>
     </div>
 </section>
