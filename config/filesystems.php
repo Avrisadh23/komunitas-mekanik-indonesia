@@ -17,6 +17,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Disk Used for Admin Uploads
+    |--------------------------------------------------------------------------
+    |
+    | Gallery/product/sponsor/bengkel image uploads use this disk. Locally
+    | this stays "public" (files served from storage/app/public). In
+    | production, set FILESYSTEM_UPLOADS_DISK=cloudinary so uploads survive
+    | redeploys, since Render's local disk is wiped on every deploy.
+    |
+    */
+
+    'uploads' => env('FILESYSTEM_UPLOADS_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

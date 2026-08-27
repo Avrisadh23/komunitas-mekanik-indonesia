@@ -37,8 +37,8 @@ class ProductController extends Controller
         $product->is_active = true;  // Set as active by default
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $product->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('products', config('filesystems.uploads'));
+            $product->image_path = $path;
         }
 
         $product->order = (Product::max('order') ?? 0) + 1;
@@ -79,10 +79,10 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             if ($product->image_path) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $product->image_path));
+                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $product->image_path));
             }
-            $path = $request->file('image')->store('products', 'public');
-            $product->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('products', config('filesystems.uploads'));
+            $product->image_path = $path;
         }
 
         $product->save();
@@ -98,7 +98,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if ($product->image_path) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $product->image_path));
+            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $product->image_path));
         }
 
         $product->delete();

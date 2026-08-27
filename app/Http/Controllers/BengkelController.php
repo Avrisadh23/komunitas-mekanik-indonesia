@@ -75,8 +75,8 @@ class BengkelController extends Controller
         $bengkel->longitude = $validated['longitude'] ?? null;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('bengkels', 'public');
-            $bengkel->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('bengkels', config('filesystems.uploads'));
+            $bengkel->image_path = $path;
         }
 
         $bengkel->save();
@@ -127,10 +127,10 @@ class BengkelController extends Controller
 
         if ($request->hasFile('image')) {
             if ($bengkel->image_path) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $bengkel->image_path));
+                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $bengkel->image_path));
             }
-            $path = $request->file('image')->store('bengkels', 'public');
-            $bengkel->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('bengkels', config('filesystems.uploads'));
+            $bengkel->image_path = $path;
         }
 
         $bengkel->save();
@@ -146,7 +146,7 @@ class BengkelController extends Controller
         $bengkel = Bengkel::findOrFail($id);
 
         if ($bengkel->image_path) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $bengkel->image_path));
+            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $bengkel->image_path));
         }
 
         $bengkel->delete();

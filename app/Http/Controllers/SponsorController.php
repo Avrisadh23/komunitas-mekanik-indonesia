@@ -35,8 +35,8 @@ class SponsorController extends Controller
         $sponsor->is_active = true;  // Set as active by default
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('sponsors', 'public');
-            $sponsor->logo_path = 'storage/' . $path;
+            $path = $request->file('logo')->store('sponsors', config('filesystems.uploads'));
+            $sponsor->logo_path = $path;
         }
 
         $sponsor->order = (Sponsor::max('order') ?? 0) + 1;
@@ -75,10 +75,10 @@ class SponsorController extends Controller
 
         if ($request->hasFile('logo')) {
             if ($sponsor->logo_path) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $sponsor->logo_path));
+                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $sponsor->logo_path));
             }
-            $path = $request->file('logo')->store('sponsors', 'public');
-            $sponsor->logo_path = 'storage/' . $path;
+            $path = $request->file('logo')->store('sponsors', config('filesystems.uploads'));
+            $sponsor->logo_path = $path;
         }
 
         $sponsor->save();
@@ -94,7 +94,7 @@ class SponsorController extends Controller
         $sponsor = Sponsor::findOrFail($id);
 
         if ($sponsor->logo_path) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $sponsor->logo_path));
+            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $sponsor->logo_path));
         }
 
         $sponsor->delete();

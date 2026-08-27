@@ -33,8 +33,8 @@ class GalleryController extends Controller
         $gallery->is_active = true;  // Set as active by default
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('galleries', 'public');
-            $gallery->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('galleries', config('filesystems.uploads'));
+            $gallery->image_path = $path;
         }
 
         $gallery->order = (Gallery::max('order') ?? 0) + 1;
@@ -72,10 +72,10 @@ class GalleryController extends Controller
         if ($request->hasFile('image')) {
             // Delete old image
             if ($gallery->image_path) {
-                Storage::disk('public')->delete(str_replace('storage/', '', $gallery->image_path));
+                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $gallery->image_path));
             }
-            $path = $request->file('image')->store('galleries', 'public');
-            $gallery->image_path = 'storage/' . $path;
+            $path = $request->file('image')->store('galleries', config('filesystems.uploads'));
+            $gallery->image_path = $path;
         }
 
         $gallery->save();
@@ -91,7 +91,7 @@ class GalleryController extends Controller
         $gallery = Gallery::findOrFail($id);
 
         if ($gallery->image_path) {
-            Storage::disk('public')->delete(str_replace('storage/', '', $gallery->image_path));
+            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $gallery->image_path));
         }
 
         $gallery->delete();

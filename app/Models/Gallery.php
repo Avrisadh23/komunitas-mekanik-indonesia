@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Gallery extends Model
 {
@@ -25,13 +26,19 @@ class Gallery extends Model
 
     public function getImageUrlAttribute()
     {
-        // If we have image_path and file exists, return it
-        if ($this->image_path && file_exists(public_path($this->image_path))) {
-            return asset($this->image_path);
+        $placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f0f0f0" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="Arial" font-size="16"%3EImage Not Found%3C/text%3E%3C/svg%3E';
+
+        if (!$this->image_path) {
+            return $placeholder;
         }
-        
-        // Fallback: return gray placeholder SVG (doesn't need network)
-        return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23f0f0f0" width="400" height="300"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="Arial" font-size="16"%3EImage Not Found%3C/text%3E%3C/svg%3E';
+
+        // Legacy path saved by the old local-disk convention
+        if (str_starts_with($this->image_path, 'storage/')) {
+            return file_exists(public_path($this->image_path)) ? asset($this->image_path) : $placeholder;
+        }
+
+        // New uploads: resolve via whichever disk is configured (local or Cloudinary)
+        return Storage::disk(config('filesystems.uploads'))->url($this->image_path);
     }
 
     // Scope untuk mendapatkan gallery yang aktif

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Sponsor extends Model
 {
@@ -26,11 +27,17 @@ class Sponsor extends Model
 
     public function getLogoUrlAttribute()
     {
-        if ($this->logo_path && file_exists(public_path($this->logo_path))) {
-            return asset($this->logo_path);
+        $fallback = asset('/frontend/asset/images/logo-pertamina.jpeg');
+
+        if (!$this->logo_path) {
+            return $fallback;
         }
-        // Return local fallback - no external URLs
-        return asset('/frontend/asset/images/logo-pertamina.jpeg');
+
+        if (str_starts_with($this->logo_path, 'storage/')) {
+            return file_exists(public_path($this->logo_path)) ? asset($this->logo_path) : $fallback;
+        }
+
+        return Storage::disk(config('filesystems.uploads'))->url($this->logo_path);
     }
 
     // Scope untuk mendapatkan sponsor yang aktif

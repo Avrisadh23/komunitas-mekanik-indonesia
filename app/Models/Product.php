@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -28,11 +29,15 @@ class Product extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->image_path && file_exists(public_path($this->image_path))) {
-            return asset($this->image_path);
+        if (!$this->image_path) {
+            return null;
         }
-        // Return null to allow frontend fallback
-        return null;
+
+        if (str_starts_with($this->image_path, 'storage/')) {
+            return file_exists(public_path($this->image_path)) ? asset($this->image_path) : null;
+        }
+
+        return Storage::disk(config('filesystems.uploads'))->url($this->image_path);
     }
 
     public function getFormattedPriceAttribute()

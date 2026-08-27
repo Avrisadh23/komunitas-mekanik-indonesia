@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Bengkel extends Model
 {
@@ -34,10 +35,17 @@ class Bengkel extends Model
 
     public function getImageUrlAttribute()
     {
-        if ($this->image_path && file_exists(public_path($this->image_path))) {
-            return asset($this->image_path);
+        $fallback = 'https://via.placeholder.com/250x200?text=' . urlencode($this->name);
+
+        if (!$this->image_path) {
+            return $fallback;
         }
-        return 'https://via.placeholder.com/250x200?text=' . urlencode($this->name);
+
+        if (str_starts_with($this->image_path, 'storage/')) {
+            return file_exists(public_path($this->image_path)) ? asset($this->image_path) : $fallback;
+        }
+
+        return Storage::disk(config('filesystems.uploads'))->url($this->image_path);
     }
 
     // Scope untuk mendapatkan bengkel yang aktif
