@@ -41,11 +41,15 @@ class Bengkel extends Model
             return $fallback;
         }
 
+        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+            return $this->image_path;
+        }
+
         if (str_starts_with($this->image_path, 'storage/')) {
             return file_exists(public_path($this->image_path)) ? asset($this->image_path) : $fallback;
         }
 
-        return Storage::disk(config('filesystems.uploads'))->url($this->image_path);
+        return Storage::disk('public')->url($this->image_path);
     }
 
     // Scope untuk mendapatkan bengkel yang aktif

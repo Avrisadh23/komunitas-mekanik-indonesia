@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -37,8 +37,7 @@ class ProductController extends Controller
         $product->is_active = true;  // Set as active by default
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', config('filesystems.uploads'));
-            $product->image_path = $path;
+            $product->image_path = UploadService::store($request->file('image'), 'products');
         }
 
         $product->order = (Product::max('order') ?? 0) + 1;
@@ -78,11 +77,8 @@ class ProductController extends Controller
         $product->is_active = true;  // Ensure stays active on update
 
         if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $product->image_path));
-            }
-            $path = $request->file('image')->store('products', config('filesystems.uploads'));
-            $product->image_path = $path;
+            UploadService::delete($product->image_path);
+            $product->image_path = UploadService::store($request->file('image'), 'products');
         }
 
         $product->save();
@@ -97,9 +93,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        if ($product->image_path) {
-            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $product->image_path));
-        }
+        UploadService::delete($product->image_path);
 
         $product->delete();
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bengkel;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BengkelController extends Controller
 {
@@ -75,8 +75,7 @@ class BengkelController extends Controller
         $bengkel->longitude = $validated['longitude'] ?? null;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('bengkels', config('filesystems.uploads'));
-            $bengkel->image_path = $path;
+            $bengkel->image_path = UploadService::store($request->file('image'), 'bengkels');
         }
 
         $bengkel->save();
@@ -126,11 +125,8 @@ class BengkelController extends Controller
         $bengkel->longitude = $validated['longitude'] ?? null;
 
         if ($request->hasFile('image')) {
-            if ($bengkel->image_path) {
-                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $bengkel->image_path));
-            }
-            $path = $request->file('image')->store('bengkels', config('filesystems.uploads'));
-            $bengkel->image_path = $path;
+            UploadService::delete($bengkel->image_path);
+            $bengkel->image_path = UploadService::store($request->file('image'), 'bengkels');
         }
 
         $bengkel->save();
@@ -145,9 +141,7 @@ class BengkelController extends Controller
     {
         $bengkel = Bengkel::findOrFail($id);
 
-        if ($bengkel->image_path) {
-            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $bengkel->image_path));
-        }
+        UploadService::delete($bengkel->image_path);
 
         $bengkel->delete();
 

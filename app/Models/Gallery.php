@@ -32,13 +32,18 @@ class Gallery extends Model
             return $placeholder;
         }
 
+        // Cloudinary uploads are saved as a full URL already
+        if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+            return $this->image_path;
+        }
+
         // Legacy path saved by the old local-disk convention
         if (str_starts_with($this->image_path, 'storage/')) {
             return file_exists(public_path($this->image_path)) ? asset($this->image_path) : $placeholder;
         }
 
-        // New uploads: resolve via whichever disk is configured (local or Cloudinary)
-        return Storage::disk(config('filesystems.uploads'))->url($this->image_path);
+        // Local disk uploads
+        return Storage::disk('public')->url($this->image_path);
     }
 
     // Scope untuk mendapatkan gallery yang aktif

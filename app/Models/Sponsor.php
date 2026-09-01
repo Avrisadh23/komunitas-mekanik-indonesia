@@ -33,11 +33,15 @@ class Sponsor extends Model
             return $fallback;
         }
 
+        if (str_starts_with($this->logo_path, 'http://') || str_starts_with($this->logo_path, 'https://')) {
+            return $this->logo_path;
+        }
+
         if (str_starts_with($this->logo_path, 'storage/')) {
             return file_exists(public_path($this->logo_path)) ? asset($this->logo_path) : $fallback;
         }
 
-        return Storage::disk(config('filesystems.uploads'))->url($this->logo_path);
+        return Storage::disk('public')->url($this->logo_path);
     }
 
     // Scope untuk mendapatkan sponsor yang aktif

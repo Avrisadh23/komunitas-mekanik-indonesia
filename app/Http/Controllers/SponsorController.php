@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sponsor;
+use App\Services\UploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class SponsorController extends Controller
 {
@@ -35,8 +35,7 @@ class SponsorController extends Controller
         $sponsor->is_active = true;  // Set as active by default
 
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('sponsors', config('filesystems.uploads'));
-            $sponsor->logo_path = $path;
+            $sponsor->logo_path = UploadService::store($request->file('logo'), 'sponsors');
         }
 
         $sponsor->order = (Sponsor::max('order') ?? 0) + 1;
@@ -74,11 +73,8 @@ class SponsorController extends Controller
         $sponsor->is_active = true;  // Ensure stays active on update
 
         if ($request->hasFile('logo')) {
-            if ($sponsor->logo_path) {
-                Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $sponsor->logo_path));
-            }
-            $path = $request->file('logo')->store('sponsors', config('filesystems.uploads'));
-            $sponsor->logo_path = $path;
+            UploadService::delete($sponsor->logo_path);
+            $sponsor->logo_path = UploadService::store($request->file('logo'), 'sponsors');
         }
 
         $sponsor->save();
@@ -93,9 +89,7 @@ class SponsorController extends Controller
     {
         $sponsor = Sponsor::findOrFail($id);
 
-        if ($sponsor->logo_path) {
-            Storage::disk(config('filesystems.uploads'))->delete(str_replace('storage/', '', $sponsor->logo_path));
-        }
+        UploadService::delete($sponsor->logo_path);
 
         $sponsor->delete();
 
