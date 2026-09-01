@@ -36,12 +36,14 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 COPY nginx.conf /etc/nginx/sites-available/default
 
 # 8b. Konfigurasi PHP-FPM pakai Unix socket (hindari bentrok port sama Nginx)
-RUN sed -i 's/^listen = .*/listen = \/run\/php-fpm.sock/' /usr/local/etc/php-fpm.d/www.conf \
+RUN echo "=== www.conf BEFORE ===" \
+    && grep -n "listen" /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i -E 's/^listen[[:space:]]*=.*/listen = \/run\/php-fpm.sock/' /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.owner = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.group = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf \
-    && echo "=== www.conf listen lines ===" \
-    && grep -i "^listen" /usr/local/etc/php-fpm.d/www.conf
+    && echo "=== www.conf AFTER ===" \
+    && grep -n "listen" /usr/local/etc/php-fpm.d/www.conf
 
 # 9. Expose port (Cloud Run default 8080)
 EXPOSE 8080
