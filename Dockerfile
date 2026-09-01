@@ -36,14 +36,16 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 COPY nginx.conf /etc/nginx/sites-available/default
 
 # 8b. Konfigurasi PHP-FPM pakai Unix socket (hindari bentrok port sama Nginx)
-RUN echo "=== www.conf BEFORE ===" \
-    && grep -n "listen" /usr/local/etc/php-fpm.d/www.conf \
-    && sed -i -E 's/^listen[[:space:]]*=.*/listen = \/run\/php-fpm.sock/' /usr/local/etc/php-fpm.d/www.conf \
+# www.conf's default "listen = 127.0.0.1:9000" line ships commented out, so
+# appending a fresh active directive (later entries win in php-fpm's ini
+# parsing) instead of trying to sed-replace a line that doesn't exist active.
+RUN echo "" >> /usr/local/etc/php-fpm.d/www.conf \
+    && echo "listen = /run/php-fpm.sock" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.owner = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.group = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf \
-    && echo "=== www.conf AFTER ===" \
-    && grep -n "listen" /usr/local/etc/php-fpm.d/www.conf
+    && echo "=== www.conf active listen directives ===" \
+    && grep -n "^listen" /usr/local/etc/php-fpm.d/www.conf
 
 # 9. Expose port (Cloud Run default 8080)
 EXPOSE 8080
