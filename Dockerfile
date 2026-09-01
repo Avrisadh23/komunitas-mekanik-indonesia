@@ -39,20 +39,27 @@ COPY nginx.conf /etc/nginx/sites-available/default
 RUN sed -i 's/^listen = .*/listen = \/run\/php-fpm.sock/' /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.owner = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
     && echo "listen.group = www-data" >> /usr/local/etc/php-fpm.d/www.conf \
-    && echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf
+    && echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf \
+    && echo "=== www.conf listen lines ===" \
+    && grep -i "^listen" /usr/local/etc/php-fpm.d/www.conf
 
 # 9. Expose port (Cloud Run default 8080)
 EXPOSE 8080
 
-# 10. Script untuk menjalankan Nginx & PHP-FPM (Support Dynamic PORT for Render)
+# 10. Script untuk menjalankan Nginx & PHP-FPM (Support Dynamic PORT for Render/Railway)
 RUN echo "#!/bin/sh\n\
 : \"\${PORT:=8080}\"\n\
 sed -i \"s/8080/\$PORT/g\" /etc/nginx/sites-available/default\n\
+ln -sf /dev/stdout /var/log/nginx/access.log\n\
+ln -sf /dev/stderr /var/log/nginx/error.log\n\
 php artisan migrate --force\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
 php artisan view:cache\n\
-service nginx start\n\
-php-fpm" > /start.sh && chmod +x /start.sh
+php-fpm -D\n\
+sleep 1\n\
+echo '=== php-fpm socket check ==='\n\
+ls -la /run/php-fpm.sock || echo 'SOCKET NOT FOUND'\n\
+nginx -g 'daemon off;'" > /start.sh && chmod +x /start.sh
 
 CMD ["/start.sh"]
